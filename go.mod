@@ -1,4 +1,4 @@
-module github.com/iamleizz/bulebell
+module github.com/iamleizz/bluebell
 
 go 1.23.2
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/iamleizz/bulebell/setting"
+	"github.com/iamleizz/bluebell/setting"
 	"github.com/redis/go-redis/v9"
 )
 

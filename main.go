@@ -9,11 +9,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/iamleizz/bulebell/dao/mysql"
-	"github.com/iamleizz/bulebell/dao/redis"
-	"github.com/iamleizz/bulebell/logger"
-	"github.com/iamleizz/bulebell/routes"
-	"github.com/iamleizz/bulebell/setting"
+	"github.com/iamleizz/bluebell/dao/mysql"
+	"github.com/iamleizz/bluebell/dao/redis"
+	"github.com/iamleizz/bluebell/logger"
+	"github.com/iamleizz/bluebell/routes"
+	"github.com/iamleizz/bluebell/setting"
 	"go.uber.org/zap"
 )
 

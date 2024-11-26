@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/iamleizz/bulebell/setting"
+	"github.com/iamleizz/bluebell/setting"
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 )

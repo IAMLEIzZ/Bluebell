@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/iamleizz/bulebell/logger"
+	"github.com/iamleizz/bluebell/logger"
 )
 
 func SetUp() *gin.Engine{
