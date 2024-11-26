@@ -14,7 +14,6 @@ import (
 	"github.com/iamleizz/bulebell/logger"
 	"github.com/iamleizz/bulebell/routes"
 	"github.com/iamleizz/bulebell/setting"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -25,20 +24,20 @@ func main() {
 		return 
 	}
 	//2. 初始化日志
-	if err := logger.Init(); err != nil {
+	if err := logger.Init(setting.Conf.LogConfig); err != nil {
 		fmt.Printf("init logger failed, err:%v\n", err)
 		return 
 	}
 	defer zap.L().Sync()
 	zap.L().Debug("logger init success...")
 	//3. 初始化数据库
-	if err := mysql.Init(); err != nil {
+	if err := mysql.Init(setting.Conf.MySQLConfig); err != nil {
 		fmt.Printf("init mysql failed, err:%v\n", err)
 		return 
 	}
 	defer mysql.Close()
 	//4. 初始化redis
-	if err := redis.Init(); err != nil {
+	if err := redis.Init(setting.Conf.RedisConfig); err != nil {
 		fmt.Printf("init redis failed, err:%v\n", err)
 		return 
 	}
@@ -46,8 +45,9 @@ func main() {
 	//5. 注册路由
 	r := routes.SetUp()
 	//6. 启动服务（优雅启动和重启）
+	fmt.Println(setting.Conf.Port)
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%d", viper.GetInt("app.port")),
+		Addr: fmt.Sprintf(":%d", setting.Conf.Port),
 		Handler: r,
 	}
 

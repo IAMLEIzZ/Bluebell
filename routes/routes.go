@@ -13,9 +13,7 @@ func SetUp() *gin.Engine{
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
 	r.GET("/", func (c *gin.Context){
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello world!",
-		})
+		c.String(http.StatusOK, "hello world")
 	})
 
 	return r
