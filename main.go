@@ -9,9 +9,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/iamleizz/bluebell/controller"
 	"github.com/iamleizz/bluebell/dao/mysql"
 	"github.com/iamleizz/bluebell/dao/redis"
 	"github.com/iamleizz/bluebell/logger"
+	"github.com/iamleizz/bluebell/pkg/snowflake"
 	"github.com/iamleizz/bluebell/routes"
 	"github.com/iamleizz/bluebell/setting"
 	"go.uber.org/zap"
@@ -24,7 +26,7 @@ func main() {
 		return 
 	}
 	//2. 初始化日志
-	if err := logger.Init(setting.Conf.LogConfig); err != nil {
+	if err := logger.Init(setting.Conf.LogConfig, setting.Conf.Mode); err != nil {
 		fmt.Printf("init logger failed, err:%v\n", err)
 		return 
 	}
@@ -42,10 +44,21 @@ func main() {
 		return 
 	}
 	defer redis.Close()
+	// 初始化 gin 框架内置的校验器的翻译器
+	if err := controller.InitTrans("zh"); err != nil {
+		fmt.Printf("init validator trans faild, err:%v\n", err)
+		return 
+	}
 	//5. 注册路由
-	r := routes.SetUp()
-	//6. 启动服务（优雅启动和重启）
-	fmt.Println(setting.Conf.Port)
+	r := routes.SetUp(setting.Conf.Mode)
+	//7. 初始化分布式 id 生成器
+	if err := snowflake.Init("2024-12-12", 1); err != nil {
+		fmt.Printf("init snowflake faild, err:%v\n", err)
+		return 
+	}
+	//8. 启动服务（优雅启动和重启）
+	port := fmt.Sprintf("%s%d%s", "++++++++-> PORT:", setting.Conf.Port, " <-++++++++")
+	fmt.Println(port)
 	srv := &http.Server{
 		Addr: fmt.Sprintf(":%d", setting.Conf.Port),
 		Handler: r,

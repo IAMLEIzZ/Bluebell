@@ -16,7 +16,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func Init(cfg *setting.LogConfig) (err error) {
+func Init(cfg *setting.LogConfig, mode string) (err error) {
 	writerSyncer := getLogWriter(
 		cfg.Filename,
 		cfg.MaxSize,
@@ -29,8 +29,19 @@ func Init(cfg *setting.LogConfig) (err error) {
 	if err != nil {
 		return err
 	}
-	core := zapcore.NewCore(encoder, writerSyncer, l)
 
+	var core zapcore.Core
+	if mode == "dev" {
+		// 开发模式将信息输出到控制台
+		consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
+		core = zapcore.NewTee(
+			zapcore.NewCore(encoder, writerSyncer, l),
+			zapcore.NewCore(consoleEncoder, zapcore.Lock(os.Stdout), zapcore.DebugLevel),
+		)
+	} else {
+		core = zapcore.NewCore(encoder, writerSyncer, l)
+	}
+	
 	lg := zap.New(core, zap.AddCaller())
 	zap.ReplaceGlobals(lg)
 
