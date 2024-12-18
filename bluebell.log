@@ -157,3 +157,9 @@
 2024-12-18T16:59:12.787+0800	INFO	logger/logger.go:81	/login	{"status": 200, "method": "POST", "path": "/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.00119375}
 2024-12-18T16:59:14.540+0800	INFO	Bluebell/main.go:77	Shutdown Server...
 2024-12-18T16:59:14.541+0800	INFO	Bluebell/main.go:86	Server exiting
+2024-12-18T17:47:03.720+0800	DEBUG	Bluebell/main.go:34	logger init success...
+2024-12-18T17:47:08.161+0800	INFO	logger/logger.go:81	/login	{"status": 200, "method": "POST", "path": "/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.005100833}
+2024-12-18T17:47:17.444+0800	INFO	logger/logger.go:81	/login	{"status": 200, "method": "POST", "path": "/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.002881583}
+2024-12-18T17:47:20.278+0800	INFO	logger/logger.go:81	/login	{"status": 200, "method": "POST", "path": "/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.001074208}
+2024-12-18T17:47:25.768+0800	INFO	Bluebell/main.go:77	Shutdown Server...
+2024-12-18T17:47:25.769+0800	INFO	Bluebell/main.go:86	Server exiting

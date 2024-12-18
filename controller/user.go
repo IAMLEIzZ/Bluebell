@@ -1,16 +1,17 @@
 package controller
 
 import (
-	"net/http"
+	"errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/iamleizz/bluebell/dao/mysql"
 	"github.com/iamleizz/bluebell/logic"
 	"github.com/iamleizz/bluebell/models"
 	"go.uber.org/zap"
 )
 
-// SignUpHandler  处理注册请求 
+// SignUpHandler  处理注册请求
 func SignUpHandler(c *gin.Context) {
     // 拦截请求
     // 获取参数结构体
@@ -21,28 +22,23 @@ func SignUpHandler(c *gin.Context) {
         // 判断 err 是否为 validator 类型
         errs, ok := err.(validator.ValidationErrors)
         if !ok {
-            c.JSON(http.StatusOK, gin.H{
-            "msg": err.Error(),
-            })
+            ResponseError(c, CodeInvalidParam)
             return 
         }
-        c.JSON(http.StatusOK, gin.H{
-            "msg": removeTopStruct(errs.Translate(trans)),
-        })
+        ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
         return 
     }
 
 
     if err := logic.SignUp(p); err != nil {
-        c.JSON(http.StatusOK, gin.H{
-            "msg": "注册失败",
-        })
+        if errors.Is(err, mysql.ErrUserExist) {
+            ResponseError(c, CodeUserExist)
+        }
+        ResponseError(c, CodeServerBusy)
         return 
     }
 
-    c.JSON(http.StatusOK, gin.H{
-        "mag": "success",
-    })
+    ResponsSuccess(c, nil)
      
 }
 
@@ -55,26 +51,21 @@ func LoginHandler(c *gin.Context) {
         zap.L().Error("Login with invalid param", zap.Error(err))
         errs, ok := err.(validator.ValidationErrors)
         if !ok {
-            c.JSON(http.StatusOK, gin.H{
-            "msg": err.Error(),
-            })
+            ResponseError(c, CodeInvalidParam)
             return 
         }
-        c.JSON(http.StatusOK, gin.H{
-            "msg": removeTopStruct(errs.Translate(trans)),
-        })
-        return  
-    }
-
-    if err := logic.Login(p); err != nil {
-        c.JSON(http.StatusOK, gin.H{
-            "msg": err.Error(),
-        })
+        ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
         return 
     }
 
-    c.JSON(http.StatusOK, gin.H{
-        "msg": "success",
-    })
+    if err := logic.Login(p); err != nil {
+        if errors.Is(err, mysql.ErrUserNotExist) {
+            ResponseError(c, CodeUserNotExist)
+            return
+        }
+        ResponseError(c, CodeInvalidPassword)
+        return 
+    }
 
+    ResponsSuccess(c, nil)
 }
