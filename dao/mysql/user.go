@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"crypto/md5"
+	"database/sql"
 	"encoding/hex"
 	"errors"
 
@@ -28,6 +29,22 @@ func InsertUser(user *models.User) (err error) {
 	_, err = db.Exec(sqlStr, user.UserID, user.Username, user.Password)
 
 	return err
+}
+
+func Login(user *models.User) (err error) {
+	oPassword := user.Password
+	sqlStr := `select user_id, username, password from user where username = ?`
+	if err = db.Get(user, sqlStr, user.Username); err != nil {
+		if err == sql.ErrNoRows {
+			return errors.New("用户不存在")
+		}
+		return err
+	}
+	password := encryptPassword(oPassword)
+	if password != user.Password {
+		return errors.New("密码错误")
+	}
+	return
 }
 
 func encryptPassword(oPassword string) string {
