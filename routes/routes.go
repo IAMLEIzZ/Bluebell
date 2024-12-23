@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/iamleizz/bluebell/controller"
 	"github.com/iamleizz/bluebell/logger"
+	"github.com/iamleizz/bluebell/middlewares"
 )
 
 func SetUp(mode string) *gin.Engine{
@@ -19,8 +20,8 @@ func SetUp(mode string) *gin.Engine{
 	r.POST("/signup", controller.SignUpHandler)
 	r.POST("/login", controller.LoginHandler)
 	
-	r.GET("/", func (c *gin.Context){
-		c.String(http.StatusOK, "hello world")
+	r.GET("/ping", middlewares.JWTAuthMiddleware(), func (c *gin.Context){
+		c.String(http.StatusOK, "pong")
 	})
 
 	return r

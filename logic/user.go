@@ -3,6 +3,7 @@ package logic
 import (
 	"github.com/iamleizz/bluebell/dao/mysql"
 	"github.com/iamleizz/bluebell/models"
+	"github.com/iamleizz/bluebell/pkg/jwt"
 	"github.com/iamleizz/bluebell/pkg/snowflake"
 )
 
@@ -22,11 +23,15 @@ func SignUp(p *models.ParamSignUP) (err error){
 	return mysql.InsertUser(user)
 }
 
-func Login(p *models.ParamLogin) (err error) {
+func Login(p *models.ParamLogin) (token string, err error) {
 	user := &models.User{
 		Username: p.Username,
 		Password: p.Password,
 	}
+	
+	if err := mysql.Login(user); err != nil {
+		return "", err
+	}
 
-	return mysql.Login(user)
+	return jwt.GenToken(user.UserID, user.Username)
 }

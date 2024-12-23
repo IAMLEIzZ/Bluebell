@@ -58,7 +58,9 @@ func LoginHandler(c *gin.Context) {
         return 
     }
 
-    if err := logic.Login(p); err != nil {
+    token, err := logic.Login(p)
+
+    if err != nil {
         if errors.Is(err, mysql.ErrUserNotExist) {
             ResponseError(c, CodeUserNotExist)
             return
@@ -67,5 +69,5 @@ func LoginHandler(c *gin.Context) {
         return 
     }
 
-    ResponsSuccess(c, nil)
+    ResponsSuccess(c, token)
 }
