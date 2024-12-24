@@ -1,10 +1,10 @@
 package middlewares
 
 import (
-	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/iamleizz/bluebell/controller"
 	"github.com/iamleizz/bluebell/pkg/jwt"
 )
 
@@ -16,20 +16,14 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		// 这里的具体实现方式要依据你的实际业务情况决定
 		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusOK, gin.H{
-				"code": 2003,
-				"msg":  "请求头中auth为空",
-			})
+			controller.ResponseError(c, controller.CodeNeedLogin)
 			c.Abort()
 			return
 		}
 		// 按空格分割
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
-			c.JSON(http.StatusOK, gin.H{
-				"code": 2004,
-				"msg":  "请求头中auth格式有误",
-			})
+			controller.ResponseError(c, controller.CodeInvildToken)
 			c.Abort()
 			return
 		}
@@ -37,15 +31,12 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		
 		mc, err := jwt.ParseToken(parts[1])
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"code": 2005,
-				"msg":  "无效的Token",
-			})
+			controller.ResponseError(c, controller.CodeInvildToken)
 			c.Abort()
 			return
 		}
 		// 将当前请求的username信息保存到请求的上下文c上
-		c.Set("userID", mc.UserID)
+		c.Set(controller.ContextUserIDKey, mc.UserID)
 		c.Next() // 后续的处理函数可以用过c.Get("username")来获取当前请求的用户信息
 	}
 }
