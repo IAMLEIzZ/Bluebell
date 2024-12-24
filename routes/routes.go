@@ -27,6 +27,7 @@ func SetUp(mode string) *gin.Engine{
 	// 社区业务
 	{
 		v1.GET("/community", controller.CommunityListHandler)
+		v1.GET("/community/:id", controller.CommunityDetailHandler)
 	}
 	
 

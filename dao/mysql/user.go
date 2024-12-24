@@ -4,17 +4,11 @@ import (
 	"crypto/md5"
 	"database/sql"
 	"encoding/hex"
-	"errors"
 
 	"github.com/iamleizz/bluebell/models"
 )
 
 const secret string = "IAMLEIzZ"
-var (
-	ErrUserExist = errors.New("用户已存在")
-	ErrUserNotExist = errors.New("用户不存在")
-	ErrInvalidPassword = errors.New("用户名或密码错误")
-)
 
 func CheckUserExists(username string) (err error) {
 	sqlStr := `select count(user_id) from user where username = ?`
