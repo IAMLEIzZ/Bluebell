@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/iamleizz/bluebell/controller"
@@ -16,13 +15,20 @@ func SetUp(mode string) *gin.Engine{
 	}
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
+
+	v1 := r.Group("/api/v1")
+
 	// 注册业务请求
-	r.POST("/signup", controller.SignUpHandler)
-	r.POST("/login", controller.LoginHandler)
+	{
+		v1.POST("/signup", controller.SignUpHandler)
+		v1.POST("/login", controller.LoginHandler)
+	}
+	v1.Use(middlewares.JWTAuthMiddleware())
+	// 社区业务
+	{
+		v1.GET("/community", controller.CommunityListHandler)
+	}
 	
-	r.GET("/ping", middlewares.JWTAuthMiddleware(), func (c *gin.Context){
-		c.String(http.StatusOK, "pong")
-	})
 
 	return r
 }
