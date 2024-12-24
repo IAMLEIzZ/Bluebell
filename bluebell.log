@@ -243,3 +243,21 @@
 2024-12-24T17:17:42.719+0800	INFO	logger/logger.go:81	/api/v1/community/1	{"status": 200, "method": "GET", "path": "/api/v1/community/1", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.002095375}
 2024-12-24T17:17:46.341+0800	INFO	Bluebell/main.go:77	Shutdown Server...
 2024-12-24T17:17:46.343+0800	INFO	Bluebell/main.go:86	Server exiting
+2024-12-24T21:34:11.945+0800	DEBUG	Bluebell/main.go:34	logger init success...
+2024-12-24T21:34:42.404+0800	ERROR	controller/user.go:53	Login with invalid param	{"error": "EOF"}
+2024-12-24T21:34:42.405+0800	INFO	logger/logger.go:81	/api/v1/login	{"status": 200, "method": "POST", "path": "/api/v1/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.0009625}
+2024-12-24T21:34:47.159+0800	ERROR	controller/user.go:53	Login with invalid param	{"error": "Key: 'ParamLogin.username' Error:Field validation for 'username' failed on the 'required' tag\nKey: 'ParamLogin.password' Error:Field validation for 'password' failed on the 'required' tag"}
+2024-12-24T21:34:47.159+0800	INFO	logger/logger.go:81	/api/v1/login	{"status": 200, "method": "POST", "path": "/api/v1/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.000337833}
+2024-12-24T21:34:47.160+0800	ERROR	controller/user.go:53	Login with invalid param	{"error": "Key: 'ParamLogin.username' Error:Field validation for 'username' failed on the 'required' tag\nKey: 'ParamLogin.password' Error:Field validation for 'password' failed on the 'required' tag"}
+2024-12-24T21:34:47.160+0800	INFO	logger/logger.go:81	/api/v1/login	{"status": 200, "method": "POST", "path": "/api/v1/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.000163458}
+2024-12-24T21:35:07.930+0800	INFO	logger/logger.go:81	/api/v1/login	{"status": 200, "method": "POST", "path": "/api/v1/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.002913}
+2024-12-24T21:35:17.703+0800	INFO	logger/logger.go:81	/api/v1/community/1	{"status": 200, "method": "GET", "path": "/api/v1/community/1", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.002282625}
+2024-12-24T21:35:20.484+0800	INFO	logger/logger.go:81	/api/v1/community/2	{"status": 200, "method": "GET", "path": "/api/v1/community/2", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.000852958}
+2024-12-24T21:37:03.247+0800	INFO	logger/logger.go:81	/api/v1/post	{"status": 404, "method": "GET", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.000001333}
+2024-12-24T21:37:16.238+0800	ERROR	controller/post.go:14	code invalid params	{"error": "invalid character '}' after object key"}
+2024-12-24T21:37:16.239+0800	INFO	logger/logger.go:81	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.001319583}
+2024-12-24T21:37:48.626+0800	ERROR	controller/post.go:14	code invalid params	{"error": "json: cannot unmarshal string into Go struct field Post.community_id of type int64"}
+2024-12-24T21:37:48.628+0800	INFO	logger/logger.go:81	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.00220725}
+2024-12-24T21:37:51.687+0800	INFO	logger/logger.go:81	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.0086525}
+2024-12-24T21:39:44.673+0800	INFO	Bluebell/main.go:77	Shutdown Server...
+2024-12-24T21:39:44.678+0800	INFO	Bluebell/main.go:86	Server exiting
