@@ -12,3 +12,7 @@ func CreatePost(p *models.Post) (err error) {
 	// 访问 mysql 插入数据
 	return mysql.CreatePost(p)
 }
+
+func GetPostDetail(pid int64) (post *models.Post, err error) {
+	return mysql.GetPostDetail(pid)
+}
