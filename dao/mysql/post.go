@@ -2,7 +2,7 @@ package mysql
 
 import "github.com/iamleizz/bluebell/models"
 
-// CreatePost  创建帖子
+// CreatePost  
 func CreatePost(p *models.Post) (err error) {
 	sqlStr := `insert into post(
 	post_id, title, summary, author_id, community_id)
