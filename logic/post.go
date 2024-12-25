@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// CreatePost  创建帖子
 func CreatePost(p *models.Post) (err error) {
 	// snowflake 生成 id
 	p.ID = snowflake.GenID()
@@ -14,6 +15,7 @@ func CreatePost(p *models.Post) (err error) {
 	return mysql.CreatePost(p)
 }
 
+// GetPostDetail  根据帖子 id 获取详细的帖子信息
 func GetPostDetail(pid int64) (PostDetail *models.PostDetail, err error) {
 	post, err := mysql.GetPostDetail(pid)
 	if err != nil {
@@ -38,4 +40,34 @@ func GetPostDetail(pid int64) (PostDetail *models.PostDetail, err error) {
 		CommunityDetail: commuinty,
 	}
 	return 
+}
+
+// GetPostList  获取帖子列表
+func GetPostList(page, size int64) (postlist []*models.PostDetail, err error) {
+	// 这里 posts 的类型是 post 的切片
+	posts, err := mysql.GetPostList(page, size)
+	if err != nil {
+		return nil, err
+	}
+	postlist = make([]*models.PostDetail, 0, len(posts))
+
+	for _, post := range posts {
+		user, err := mysql.GetUserByID(post.AuthorID)
+		if err != nil {
+			zap.L().Error("mysql.GetUserByID failed", zap.Error(err))
+			continue
+		}
+		commuinty, err := mysql.GetCommunityDetail(post.CommunityID)
+		if err != nil {
+			zap.L().Error("mysql.GetCommunityDetail failed", zap.Error(err))
+			continue
+		}
+		PostDetail := &models.PostDetail{
+			AuthorName: user.Username,
+			Post: post,
+			CommunityDetail: commuinty,
+		}
+		postlist = append(postlist, PostDetail)
+	}
+	return
 }

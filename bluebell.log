@@ -282,3 +282,18 @@
 2024-12-25T13:11:04.312+0800	INFO	logger/logger.go:81	/api/v1/post/4554475926720512	{"status": 200, "method": "GET", "path": "/api/v1/post/4554475926720512", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.003367375}
 2024-12-25T13:11:09.794+0800	INFO	Bluebell/main.go:77	Shutdown Server...
 2024-12-25T13:11:09.794+0800	INFO	Bluebell/main.go:86	Server exiting
+2024-12-25T14:48:32.111+0800	DEBUG	Bluebell/main.go:34	logger init success...
+2024-12-25T14:48:36.943+0800	INFO	Bluebell/main.go:77	Shutdown Server...
+2024-12-25T14:48:36.943+0800	INFO	Bluebell/main.go:86	Server exiting
+2024-12-25T14:48:58.347+0800	DEBUG	Bluebell/main.go:34	logger init success...
+2024-12-25T14:49:03.592+0800	INFO	logger/logger.go:81	/api/v1/login	{"status": 200, "method": "POST", "path": "/api/v1/login", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.017444709}
+2024-12-25T14:49:39.582+0800	INFO	logger/logger.go:81	/api/v1/post	{"status": 404, "method": "GET", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.000000833}
+2024-12-25T14:49:58.292+0800	INFO	logger/logger.go:81	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.017205833}
+2024-12-25T14:50:09.572+0800	INFO	logger/logger.go:81	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.001819958}
+2024-12-25T14:50:28.835+0800	INFO	logger/logger.go:81	/api/v1/posts	{"status": 200, "method": "GET", "path": "/api/v1/posts", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.008352375}
+2024-12-25T14:50:47.490+0800	INFO	logger/logger.go:81	/api/v1/posts	{"status": 200, "method": "GET", "path": "/api/v1/posts", "query": "size=1", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.001171084}
+2024-12-25T14:50:49.904+0800	INFO	logger/logger.go:81	/api/v1/posts	{"status": 200, "method": "GET", "path": "/api/v1/posts", "query": "size=2", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.001517458}
+2024-12-25T14:51:04.849+0800	INFO	logger/logger.go:81	/api/v1/posts	{"status": 200, "method": "GET", "path": "/api/v1/posts", "query": "page=1&size=2", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.002382583}
+2024-12-25T14:51:13.359+0800	INFO	logger/logger.go:81	/api/v1/posts	{"status": 200, "method": "GET", "path": "/api/v1/posts", "query": "page=1&size=1", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.001215375}
+2024-12-25T14:51:17.722+0800	INFO	logger/logger.go:81	/api/v1/posts	{"status": 200, "method": "GET", "path": "/api/v1/posts", "query": "page=2&size=1", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.0015385}
+2024-12-25T14:51:21.443+0800	INFO	logger/logger.go:81	/api/v1/posts	{"status": 200, "method": "GET", "path": "/api/v1/posts", "query": "page=3&size=1", "ip": "::1", "user-agent": "PostmanRuntime/7.42.0", "errors": "", "cost": 0.001519667}
