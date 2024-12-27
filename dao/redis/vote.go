@@ -44,29 +44,38 @@ func PostVote(ctx context.Context, userID, postID string, value float64) (err er
 	diff := math.Abs(ov - value)
 	// 在数据库中加上对应的数值
 	// 差值倍率 * (正 or 负) * 每一票代表的分值
-	_, err = rdb.ZIncrBy(ctx, getKey(KeyPostScore), diff * dir * scorePreVote, postID).Result()
-	
-	if err != nil {
-		return err
-	}
+	pipeline := rdb.TxPipeline()
+	pipeline.ZIncrBy(ctx, getKey(KeyPostScore), diff * dir * scorePreVote, postID)
 	// 如果当前值为0
 	if value == 0 {
-		_, err = rdb.ZRem(ctx, getKey(KeyPostVotedPf + postID), postID).Result()
+		pipeline.ZRem(ctx, getKey(KeyPostVotedPf + postID), postID)
 	} else {
-		_, err = rdb.ZAdd(ctx, getKey(KeyPostVotedPf + postID), redis.Z{
+		pipeline.ZAdd(ctx, getKey(KeyPostVotedPf + postID), redis.Z{
 			Member: userID,
 			Score: value,
-		}).Result()
+		})
 	}
+	_, err = pipeline.Exec(ctx)
 
 	return 
 }
 
-func CreatePost(ctx context.Context, postID int64) error {
+func CreatePost(ctx context.Context, postID int64) (err error) {
+	// redis 事务
+	pipeline := rdb.TxPipeline()
 	// 创建帖子时，将帖子的创建时间加入到 zset 中
-	_, err := rdb.ZAdd(ctx, getKey(KeyPostTime), redis.Z{
+	pipeline.ZAdd(ctx, getKey(KeyPostTime), redis.Z{
 		Score: float64(time.Now().Unix()),
 		Member: postID,
-	}).Result()
+	})
+
+	// 创建帖子时，将帖子的默认分值加入 zset 中
+	pipeline.ZAdd(ctx, getKey(KeyPostScore), redis.Z{
+		Score: float64(time.Now().Unix()),
+		Member: postID,
+	})
+
+	_, err = pipeline.Exec(ctx)
+
 	return err
 }
