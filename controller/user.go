@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -60,7 +61,7 @@ func LoginHandler(c *gin.Context) {
         return 
     }
 
-    token, err := logic.Login(p)
+    user, err := logic.Login(p)
 
     if err != nil {
         if errors.Is(err, mysql.ErrUserNotExist) {
@@ -73,5 +74,9 @@ func LoginHandler(c *gin.Context) {
         return 
     }
 
-    ResponsSuccess(c, token)
+    ResponsSuccess(c, gin.H{
+        "user_id": fmt.Sprintf("%d", user.UserID),
+        "user_name": user.Username,
+        "token": user.Token,
+    })
 }

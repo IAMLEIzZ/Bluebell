@@ -1,18 +1,25 @@
 package logic
 
 import (
+	"context"
+
 	"github.com/iamleizz/bluebell/dao/mysql"
+	"github.com/iamleizz/bluebell/dao/redis"
 	"github.com/iamleizz/bluebell/models"
 	"github.com/iamleizz/bluebell/pkg/snowflake"
 	"go.uber.org/zap"
 )
 
 // CreatePost  创建帖子
-func CreatePost(p *models.Post) (err error) {
+func CreatePost(ctx context.Context, p *models.Post) (err error) {
 	// snowflake 生成 id
 	p.ID = snowflake.GenID()
 	// 访问 mysql 插入数据
-	return mysql.CreatePost(p)
+	err = mysql.CreatePost(p)
+	if err != nil {
+		return err
+	}
+	return redis.CreatePost(ctx, p.ID)
 }
 
 // GetPostDetail  根据帖子 id 获取详细的帖子信息

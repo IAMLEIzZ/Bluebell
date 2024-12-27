@@ -27,7 +27,7 @@ func CreatePostHandler(c *gin.Context) {
 	}
 
 	p.AuthorID = authorID
-	err = logic.CreatePost(p)
+	err = logic.CreatePost(c.Request.Context(), p)
 
 	if err != nil {
 		zap.L().Error("login.CreatePost failed", zap.Error(err))
