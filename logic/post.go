@@ -78,3 +78,40 @@ func GetPostList(page, size int64) (postlist []*models.PostDetail, err error) {
 	}
 	return
 }
+
+// GetPostListOrder  按照帖子的发布时间或者热度排序
+func GetPostListOrder(ctx context.Context, p *models.ParamPostList) (postlist []*models.PostDetail, err error){
+	// 查询 redis，返回对应帖子列表的所有帖子的 id
+	ids, err := redis.GetPostIdsByOrder(ctx, p)
+	if err != nil {
+		return 
+	}
+	// 根据上述 id，查询post 表，返回所有 post 的信息
+	posts, err := mysql.GetPostListByIds(ids)
+
+	if err != nil {
+		return
+	}
+	// 将 Post 封装为 PostDetailList
+	postlist = make([]*models.PostDetail, 0, len(posts))
+	for _, post := range posts {
+		user, err := mysql.GetUserByID(post.AuthorID)
+		if err != nil {
+			zap.L().Error("mysql.GetUserByID failed", zap.Error(err))
+			continue
+		}
+		commuinty, err := mysql.GetCommunityDetail(post.CommunityID)
+		if err != nil {
+			zap.L().Error("mysql.GetCommunityDetail failed", zap.Error(err))
+			continue
+		}
+		PostDetail := &models.PostDetail{
+			AuthorName: user.Username,
+			Post: post,
+			CommunityDetail: commuinty,
+		}
+		postlist = append(postlist, PostDetail)
+	}
+
+	return 
+}

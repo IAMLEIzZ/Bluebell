@@ -70,3 +70,31 @@ func GetPostListHandler(c *gin.Context) {
 	}
 	ResponsSuccess(c, postlist)
 }
+// GetPostListHandler2  根据时间或热度,对帖子进行排序展示
+// 1. 获取分页和排序参数
+// 2. 去 redis 中获取对应的post_id查询结果
+// 3. 在 mysql 中，根据post_id查询对应的帖子详情
+func GetPostListOrderHandler(c *gin.Context) {
+	p := &models.ParamPostList{
+		Page: 1,
+		Size: 10,
+		Order: "time",
+	}
+
+	err := c.ShouldBindQuery(p)
+	if err != nil {
+		zap.L().Error("c.ShouldBindQuery Failed:", zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return 
+	}
+
+	// 参数绑定完毕，将参数传给 logic 层
+	postlist, err := logic.GetPostListOrder(c.Request.Context(), p)
+
+	if err != nil {
+		zap.L().Error("logic.GetPostList Failed:", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return 
+	}
+	ResponsSuccess(c, postlist)
+}
