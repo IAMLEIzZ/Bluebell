@@ -2,20 +2,10 @@ package redis
 
 import (
 	"context"
-	"errors"
 	"math"
 	"time"
 
 	"github.com/redis/go-redis/v9"
-)
-
-const (
-	oneWeekInSeconds = 7 * 24 * 3600
-	scorePreVote = 432
-)
-
-var (
-	ErrVoteTimeExpire = errors.New("投票时间已过")
 )
 
 /*
@@ -25,7 +15,7 @@ func PostVote(ctx context.Context, userID, postID string, value float64) (err er
 	// pipeline := rdb.Pipeline()
 	postTime := rdb.ZScore(ctx, getKey(KeyPostTime), postID).Val()
 	// 如果时间超过一周，则不能投票
-	if float64(time.Now().Unix()) - postTime > oneWeekInSeconds {
+	if float64(time.Now().Unix()) - postTime > OneWeekInSeconds {
 		return ErrVoteTimeExpire
 	}
 	// 从 zset 中获取当前用户的投票记录
@@ -45,7 +35,7 @@ func PostVote(ctx context.Context, userID, postID string, value float64) (err er
 	// 在数据库中加上对应的数值
 	// 差值倍率 * (正 or 负) * 每一票代表的分值
 	pipeline := rdb.TxPipeline()
-	pipeline.ZIncrBy(ctx, getKey(KeyPostScore), diff * dir * scorePreVote, postID)
+	pipeline.ZIncrBy(ctx, getKey(KeyPostScore), diff * dir * ScorePreVote, postID)
 	// 如果当前值为0
 	if value == 0 {
 		pipeline.ZRem(ctx, getKey(KeyPostVotedPf + postID), postID)

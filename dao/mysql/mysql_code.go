@@ -8,3 +8,7 @@ var (
 	ErrInvalidPassword = errors.New("用户名或密码错误")
 	ErrInvalidID = errors.New("无效的ID")
 )
+
+const (
+	Secret = "IAMLEIzZ"
+)

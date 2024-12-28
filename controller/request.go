@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const ContextUserIDKey = "userID"
 
 var ErrorUserNotLogin = errors.New("用户未登录")
 
@@ -28,8 +27,8 @@ func getCurrentUserID(c *gin.Context) (userID int64, err error) {
 
 // getPageInfo  获取分页参数
 func getPageInfo(c *gin.Context) (int64, int64) {
-	pageStr := c.Query("page")
-	sizeStr := c.Query("size")
+	pageStr := c.Query(CodeUrlQueryPage)
+	sizeStr := c.Query(CodeUrlQuerySize)
 
 	var (
 		page int64

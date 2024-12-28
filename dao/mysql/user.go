@@ -8,8 +8,6 @@ import (
 	"github.com/iamleizz/bluebell/models"
 )
 
-const secret string = "IAMLEIzZ"
-
 func CheckUserExists(username string) (err error) {
 	sqlStr := `select count(user_id) from user where username = ?`
 	var count int
@@ -48,7 +46,7 @@ func Login(user *models.User) (err error) {
 
 func encryptPassword(oPassword string) string {
 	h := md5.New()
-	h.Write([]byte(secret))
+	h.Write([]byte(Secret))
 	return hex.EncodeToString(h.Sum([]byte(oPassword)))
 }
 

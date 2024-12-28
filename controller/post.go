@@ -40,7 +40,7 @@ func CreatePostHandler(c *gin.Context) {
 // GetPostDetailHandler  获取帖子详细内容
 func GetPostDetailHandler(c *gin.Context) {
 	// 绑定参数
-	pidStr := c.Param("id")
+	pidStr := c.Param(CodeUrlQueryID)
 	pid, err := strconv.ParseInt(pidStr, 10, 64)
 	if err != nil {
 		zap.L().Error("code invalid param", zap.Error(err))
@@ -78,7 +78,7 @@ func GetPostListOrderHandler(c *gin.Context) {
 	p := &models.ParamPostList{
 		Page: 1,
 		Size: 10,
-		Order: "time",
+		Order: PostOrderByTime, 
 	}
 
 	err := c.ShouldBindQuery(p)

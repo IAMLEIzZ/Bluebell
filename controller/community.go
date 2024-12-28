@@ -23,7 +23,7 @@ func CommunityListHandler(c *gin.Context) {
 
 func CommunityDetailHandler(c *gin.Context) {
 	// 接收路径参数 id
-	idStr := c.Param("id")
+	idStr := c.Param(CodeUrlQueryID)
 	communityID, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
 		zap.L().Error("Code Invalid Param", zap.Error(err))

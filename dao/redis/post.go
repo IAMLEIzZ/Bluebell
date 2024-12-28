@@ -9,7 +9,7 @@ import (
 func GetPostIdsByOrder(ctx context.Context, p *models.ParamPostList) ([]string, error) {
 	// 获取 Key
 	key := getKey(KeyPostTime)
-	if p.Order == "Score" {
+	if p.Order == PostOrderByScore {
 		key = getKey(KeyPostScore)
 	}
 	// 计算其实起始参数

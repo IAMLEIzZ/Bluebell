@@ -13,6 +13,18 @@ const (
 	CodeInvildToken
 )
 
+const (
+	PostOrderByTime = "time"
+	PostOrderByScore = "score"
+)
+
+const (
+	CodeUrlQueryID = "id"
+	ContextUserIDKey = "userID"
+	CodeUrlQueryPage = "page"
+	CodeUrlQuerySize = "size"
+)
+
 var codeMsgMap = map[ResCode]string {
 	CodeSuccess: "success",
 	CodeInvalidParam: "请求参数错误",

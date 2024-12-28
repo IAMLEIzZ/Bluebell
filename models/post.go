@@ -9,13 +9,13 @@ type Post struct {
 	CommunityID int64     `json:"community_id" db:"community_id" binding:"required"`
 	Status      int32     `json:"status" db:"status"`
 	Title       string    `json:"title" db:"title" binding:"required"`
-	Summary     string    `json:"summary" db:"summary" binding:"required"`
+	Content     string    `json:"content" db:"content" binding:"required"`
 	CreateTime  time.Time `json:"create_time" db:"create_time"`
 }
 
 // 帖子详细信息包含作者名称
 type PostDetail struct {
 	AuthorName       string `json:"author_name"`
-	*Post            `json:"post"`
+	*Post            
 	*CommunityDetail `json:"community"`
 }
