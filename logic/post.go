@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/iamleizz/bluebell/dao/mysql"
 	"github.com/iamleizz/bluebell/dao/redis"
@@ -23,12 +24,16 @@ func CreatePost(ctx context.Context, p *models.Post) (err error) {
 }
 
 // GetPostDetail  根据帖子 id 获取详细的帖子信息
-func GetPostDetail(pid int64) (PostDetail *models.PostDetail, err error) {
+func GetPostDetail(ctx context.Context, pid int64) (PostDetail *models.PostDetail, err error) {
 	post, err := mysql.GetPostDetail(pid)
 	if err != nil {
 		zap.L().Error("mysql.GetPostDetail failed", zap.Error(err))
 		return nil, err
 	}
+	// 这里根据帖子 ID 查询出对应的点赞数予以返回展示
+	// int64 == string
+	post_id := fmt.Sprintf("%d", post.PostID)
+	voteNum := redis.GetVoteNumById(ctx, post_id)
 
 	user, err := mysql.GetUserByID(post.AuthorID)
 	if err != nil {
@@ -44,6 +49,7 @@ func GetPostDetail(pid int64) (PostDetail *models.PostDetail, err error) {
 	PostDetail = &models.PostDetail{
 		AuthorName: user.Username,
 		Post: post,
+		VoteNum: voteNum,
 		CommunityDetail: commuinty,
 	}
 	return 
@@ -88,13 +94,17 @@ func GetPostListOrder(ctx context.Context, p *models.ParamPostList) (postlist []
 	}
 	// 根据上述 id，查询post 表，返回所有 post 的信息
 	posts, err := mysql.GetPostListByIds(ids)
-
+	if err != nil {
+		return
+	}
+	// 这里获取帖子的 Vote 数量
+	votedata, err := redis.GetVoteNumByIds(ctx, ids)
 	if err != nil {
 		return
 	}
 	// 将 Post 封装为 PostDetailList
 	postlist = make([]*models.PostDetail, 0, len(posts))
-	for _, post := range posts {
+	for idx, post := range posts {
 		user, err := mysql.GetUserByID(post.AuthorID)
 		if err != nil {
 			zap.L().Error("mysql.GetUserByID failed", zap.Error(err))
@@ -107,6 +117,7 @@ func GetPostListOrder(ctx context.Context, p *models.ParamPostList) (postlist []
 		}
 		PostDetail := &models.PostDetail{
 			AuthorName: user.Username,
+			VoteNum: votedata[idx],
 			Post: post,
 			CommunityDetail: commuinty,
 		}

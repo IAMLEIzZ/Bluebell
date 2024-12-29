@@ -20,6 +20,10 @@ func PostVote(ctx context.Context, userID, postID string, value float64) (err er
 	}
 	// 从 zset 中获取当前用户的投票记录
 	ov := rdb.ZScore(ctx, getKey(KeyPostVotedPf+postID), userID).Val()
+	// 不允许重复投票
+	if ov == value {
+		return ErrVoteRepeat
+	}
 	var dir float64
 	if value > ov {
 		// 如果现在的值大于原来的值，则代表需要加上一票
@@ -68,4 +72,37 @@ func CreatePost(ctx context.Context, postID int64) (err error) {
 	_, err = pipeline.Exec(ctx)
 
 	return err
+}
+
+
+// GetVoteNumByIds  根据帖子的 ID 获取帖子的赞成票数
+func GetVoteNumByIds(ctx context.Context, ids []string) (data []int64, err error) {
+	// 这里没有使用事务管道		
+	pipeline := rdb.Pipeline()
+	// 拼接 Key
+	for _, id := range ids {
+		key := getKey(KeyPostVotedPf + id)
+		pipeline.ZCount(ctx, key, "1", "1")
+	}
+	cmders, err := pipeline.Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	data = make([]int64, 0, len(cmders))
+	for _, cmder := range cmders {
+		// 将字符串类型的 cmder 转化为 int64 类型
+		voteNum := cmder.(*redis.IntCmd).Val()
+		data = append(data, voteNum)
+	}
+
+	return 
+}
+
+func GetVoteNumById(ctx context.Context, pid string) (voteNum int64) {
+	// 获取 key
+	key := getKey(KeyPostVotedPf + pid)
+	// 这里不用 pipeline，因为只有一次链接请求
+	vn := rdb.ZCount(ctx, key, "1", "1").Val()
+
+	return vn
 }

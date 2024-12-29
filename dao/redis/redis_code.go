@@ -14,4 +14,5 @@ const (
 
 var (
 	ErrVoteTimeExpire = errors.New("投票时间已过")
+	ErrVoteRepeat = errors.New("不允许重复投票")
 )

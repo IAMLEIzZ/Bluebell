@@ -49,7 +49,7 @@ func GetPostDetailHandler(c *gin.Context) {
 		return 
 	}
 	
-	post, err := logic.GetPostDetail(pid)
+	post, err := logic.GetPostDetail(c.Request.Context(), pid)
 	if err != nil {
 		zap.L().Error("logic.GetPostDetail Failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
