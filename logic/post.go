@@ -13,13 +13,13 @@ import (
 // CreatePost  创建帖子
 func CreatePost(ctx context.Context, p *models.Post) (err error) {
 	// snowflake 生成 id
-	p.ID = snowflake.GenID()
+	p.PostID = snowflake.GenID()
 	// 访问 mysql 插入数据
 	err = mysql.CreatePost(p)
 	if err != nil {
 		return err
 	}
-	return redis.CreatePost(ctx, p.ID)
+	return redis.CreatePost(ctx, p.PostID)
 }
 
 // GetPostDetail  根据帖子 id 获取详细的帖子信息

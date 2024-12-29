@@ -41,6 +41,7 @@ func CreatePostHandler(c *gin.Context) {
 func GetPostDetailHandler(c *gin.Context) {
 	// 绑定参数
 	pidStr := c.Param(CodeUrlQueryID)
+	zap.L().Debug("pid", zap.String("post_id", pidStr))
 	pid, err := strconv.ParseInt(pidStr, 10, 64)
 	if err != nil {
 		zap.L().Error("code invalid param", zap.Error(err))
